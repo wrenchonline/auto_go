@@ -1,0 +1,29 @@
+syntax = "proto3";
+option go_package = "./mygrpc";
+package myservice;
+
+service MyService {
+    rpc Authenticate(AuthRequest) returns (AuthResponse) {}
+    rpc PressKey(stream KeyRequest) returns (stream KeyResponse) {}
+}
+
+message AuthRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message AuthResponse {
+    bool success = 1;
+    string token = 2;
+}
+
+message KeyRequest {
+    string key = 1;
+    string token = 2;
+}
+
+message KeyResponse {
+    bool success = 1;
+    string token = 2;
+    string key = 3;
+}
