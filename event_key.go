@@ -1,33 +1,27 @@
 package main
 
 import (
-	"github.com/go-vgo/robotgo"
-	hook "github.com/robotn/gohook"
+	routeChat "evenkey/route"
+	"flag"
+	"fmt"
 )
 
 func main() {
-	//robotgo.KeySleep = 50
-	robotgo.SetKeyDelay(0)
-	for {
-		robotgo.KeySleep = 1
-		robotgo.EventHook(hook.KeyDown, []string{"b"}, func(e hook.Event) {
-			robotgo.EventEnd()
-		})
-		s := robotgo.EventStart()
-		<-robotgo.EventProcess(s)
-		ok := robotgo.AddEvents("b")
-		if ok {
-			//狂战血怒
-			robotgo.KeyDown(`x`)
 
-			robotgo.KeyUp(`x`)
+	c := &routeChat.Client{}
 
-			robotgo.KeyDown(`t`)
+	// 定义命令行参数
+	flag.IntVar(&c.Port, "port", 50051, "gRPC server port")
+	flag.StringVar(&c.Addr, "addr", "localhost", "gRPC server address")
+	flag.StringVar(&c.Username, "username", "root", "username")
+	flag.StringVar(&c.Password, "password", "root", "password")
+	flag.IntVar(&c.Keydelay, "delay", 10, "key press delay")
+	// 解析命令行参数
+	flag.Parse()
 
-			robotgo.KeyUp(`t`)
-			robotgo.KeySleep = 10
+	// 打印解析出来的参数值
+	fmt.Printf("port=%d, addr=%s, Username=%s, Password=%s\n",
+		c.Port, c.Addr, c.Username, c.Password)
 
-		}
-	}
-
+	c.Run()
 }
